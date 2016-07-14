@@ -1,0 +1,134 @@
+" Set vim to 256 color mode
+set t_Co=256
+" Enable syntax highlighting
+syntax on
+" Set colorscheme
+colorscheme monokai
+hi Normal ctermbg=234
+"let g:molokai_original = 1
+" Set line number
+set relativenumber
+" Indentation {
+" Indent automatically
+set autoindent
+set shiftwidth=2
+set smartindent
+set smarttab
+set softtabstop=2
+"Function to Indent code for C and CPP files according to the GNU Coding Style
+function! GnuIndent()
+    setlocal cinoptions=>4,n-2,{2,^-2,:2,=2,g0,h2,p5,t0,+2,(0,u0,w1,m1
+    setlocal shiftwidth=2
+    setlocal tabstop=8
+  endfunction
+
+au FileType c,cpp call GnuIndent()
+
+autocmd BufNewFile		*.{c,cpp,h,hpp} call GnuIndent()
+autocmd BufWritePre		*.{c,cpp,h,hpp} call GnuIndent()
+
+
+" }
+"
+"Set "_" as a word
+set iskeyword-=_
+
+"autoupdate vim
+autocmd! BufWritePost /home/bill/.vimrc.local source /home/bill/.vimrc.local
+
+" Set filetype of .S files to nasm
+au BufRead,BufNewFile *.S set filetype=nasm
+
+" Set airline symbols
+let g:airline_powerline_fonts = 1
+
+"Highlight characters that are over 80 columns if it is a .c or .h file {
+augroup collumnLimit
+  autocmd!
+  autocmd BufEnter,WinEnter,FileType c,h
+		\ highlight CollumnLimit ctermbg=DarkGrey guibg=DarkGrey
+  let collumnLimit = 81 " feel free to customize
+  let pattern =
+		\ '\%<' . (collumnLimit+1) . 'v.\%>' . collumnLimit . 'v'
+  autocmd BufEnter,WinEnter,FileType c,h
+		\ let w:m1=matchadd('CollumnLimit', pattern, -1)
+augroup END"
+" }
+
+" Save buffer after hitting the escape key twice
+map <Esc><Esc> ;w<CR>
+
+" Key Re-bidings {
+imap <ESC>oA <ESC>ki
+imap <ESC>oB <ESC>ji
+imap <ESC>oC <ESC>li
+imap <ESC>oD <ESC>hi
+"remap ':' to ';'
+nnoremap ; :
+nnoremap : ;
+vnoremap ; :
+vnoremap : ;
+"Unbind arrow keys
+inoremap <Up>	<NOP>
+inoremap <Down>	  <NOP>
+inoremap <Left>	  <NOP>
+inoremap <Right>  <NOP>
+noremap  <Up>	<NOP>
+noremap  <Down>	  <NOP>
+noremap  <Left>	  <NOP>
+noremap  <Right>  <NOP>
+
+noremap <Leader>. :update<CR>
+" }
+
+" Header insert function (from Morty) {
+
+function! EPIConfig(task)
+    if a:task == "set"
+	if expand("%") == "Makefile"
+	    execute "0read ~/.vim/headers/makefile"
+	elseif expand("%:e") == "h"
+	    execute "0read ~/.vim/headers/h"
+	elseif expand("%:e") == "c"
+	    execute "0read ~/.vim/headers/c"
+	elseif expand("%:e") == "hpp"
+        execute "0read ~/.vim/headers/e"
+	elseif expand("%:e") == "s"
+        execute "0read ~/.vim/headers/s"
+	endif
+	execute "%substitute,$FILE," . expand("%") . ",e"
+	execute "%substitute,$FN," . '\U' . expand("%:t:r") . ",e"
+	execute "%substitute,$FLDR," . expand("%:p:h:t") . ",e"
+	execute "%substitute,$PATH," . expand("%:p:h") . ",e"
+	execute "%substitute,$PROJ," . $PROJECT . ",e"
+	execute "%substitute,$NAME," . $EPI_NAME . ",e"
+	execute "%substitute,$NICK," . $EPI_LOGIN . ",e"
+	execute "%substitute,$DATE," . strftime("%a %b %d %H:%M:%S %Y") . ",e"
+	call EPIConfig("update")
+	normal Go
+    elseif a:task == "update"
+	let cursor = getpos(".")
+        execute "%substitute,Last update.*,Last update " . strftime("%a %b %d %H:%M:%S %Y") . " " . $EPI_NAME . ",e"
+	call setpos(".", cursor)
+    endif
+endfunction
+autocmd! BufNewFile		*.{c,h,hpp},Makefile	call EPIConfig("set")
+autocmd! BufWritePre		*.{c,h,hpp},Makefile	call EPIConfig("update")
+" }
+
+" Syntax coloring for .S files (asm)
+au BufRead,BufNewFile *.S set ft=nasm
+
+" NERDTree binding
+map <C-e> ;NERDTreeToggle<CR>
+
+" Tell YCM not to ask for confirmation on opening of a file (UNSECURE)
+let g:ycm_confirm_extra_conf = 0
+let g:ycm_global_ycm_extra_conf = '/home/bill/.ycm_extra_conf'
+" Close preview window opened by YCM
+autocmd CompleteDone * pclose
+" Bind F9 to FixIt feature of YCM
+map <F9> :YcmCompleter FixIt<CR>
+
+"Syntastic Configuration
+let g:syntastic_c_include_dirs = [ '../includes', 'includes' ]
