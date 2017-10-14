@@ -11,119 +11,33 @@ let mapleader=","
 " vim-plug plugins list
 call plug#begin()
 
-"Plug 'jez/vim-superman'
-"Plug 'lervag/vimtex'
-"Plug 'tpope/vim-sensible'
 Plug 'bling/vim-airline'
 Plug 'tpope/vim-repeat'
-"Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-surround'
-"Plug 'SirVer/ultisnips'
-"Plug 'honza/vim-snippets'
-Plug 'Valloric/YouCompleteMe'
-" Plug 'godlygeek/tabular' | Plug 'plasticboy/vim-markdown'
-"Plug 'mattn/emmet-vim'
+"Plug 'Valloric/YouCompleteMe'
 
 " Moving around
 Plug 'ctrlpvim/ctrlp.vim'
-"Plug 'wellle/targets.vim'
  Plug 'easymotion/vim-easymotion'
-"Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 
 " Version control
-"Plug 'airblade/vim-gitgutter'
-"Plug 'rhysd/committia.vim'
+Plug 'tpope/vim-fugitive'
 
 " General code utility
 Plug 'bronson/vim-trailing-whitespace'
-" Plug 'ervandew/supertab'
-"Plug 'raimondi/delimitMate'
-"Plug 'scrooloose/nerdcommenter'
-Plug 'tpope/vim-fugitive'
-" Plug 'AndrewRadev/splitjoin.vim'
-" Plug 'tomtom/tcomment_vim' " TODO: go back to nerdcommenter !
-" Plug 'tmhedberg/SimpylFold'
-"Plug 'rking/ag.vim' " With cheatsheet
-" Plug 'lilydjwg/colorizer'
-" Plug 'stephpy/vim-yaml'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 
-" C++
-"Plug 'octol/vim-cpp-enhanced-highlight'
-
-" " Python
-" Plug 'klen/python-mode', { 'for': ['python'] }
-" Plug 'davidhalter/jedi-vim', { 'for': ['python'] }
-" Plug 'nvie/vim-flake8'
-" Plug 'benekastah/neomake'
-" Plug 'hynek/vim-python-pep8-indent'
-" Plug 'natw/vim-pythontextobj'
-
-" C
-"Plug 'Mizuchi/STL-Syntax'
+"Haskell
+Plug 'neovimhaskell/haskell-vim'
 
 " Colorschmes
 Plug 'junegunn/seoul256.vim'
-"Plug 'crusoexia/vim-monokai'
-"Plug 'kristijanhusak/vim-hybrid-material'
-" Plug 'nanotech/jellybeans.vim'
-" Plug 'junegunn/seoul256.vim'
-" Plug 'jnurmine/Zenburn'
-" Plug 'fmoralesc/molokayo'
-" Plug 'wellsjo/wellsokai.vim'
-" Plug 'chriskempson/tomorrow-theme'
-" Plug 'altercation/vim-colors-solarized'
-
-" Tags Creation
-"Plug 'universal-ctags/ctags'
-"Plug 'xolox/vim-easytags'
-" dependency for easytags
-"Plug 'xolox/vim-misc'
 
 call plug#end()
 
 filetype plugin indent on
 
 " - PLUGINS OPTIONS
-" Neomake
-" TODO: Change it to work everytime you change the file
-" autocmd BufEnter,VimEnter * Neomake
-" autocmd BufWrite,InsertLeave * Neomake
-
-" Jedi-Vim Options :
-" let g:jedi#use_splits_not_buffers = "left"
-" let g:jedi#show_call_signatures = "2"
-
-" C++ Syntax Highlighting options
-"let g:cpp_class_scope_highlight = 1
-"let g:cpp_member_variable_highlight = 1
-"let g:cpp_experimental_simple_template_highlight = 1
-"let g:cpp_concepts_highlight = 1
-
-"let g:easytags_suppress_ctags_warning = 1
-"let g:easytags_include_members = 1
-
-" SuperTab
-" let g:SuperTabDefaultCompletionType = "<c-n>"
-" let g:SuperTabContextDefaultCompletionType = "<c-n>"
-
-" UltiSnips
-" let g:UltiSnipsExpandTrigger="<tab>"
-" let g:UltiSnipsJumpForwardTrigger="<c-b>"
-" let g:UltiSnipsJumpBackwardTrigger="<c-z>"
-" let g:UltiSnipsEditSplit="vertical"
-
-" GitGutter
-"let g:gitgutter_realtime = 500
-"let g:gitgutter_updatetime = 500
-"let g:gitgutter_eager = 500
-
-" UltiSnips
-" set runtimepath+=~/.nvim/ftdetect
-
-" Pymode
-"let g:pymode_rope = 0
-"let g:pymode_virtualenv = 1
 
 " Epitech
 "let g:epi_login = 'engueh_a'
@@ -132,8 +46,8 @@ filetype plugin indent on
 "autocmd BufNewFile,BufRead *.h set filetype=cpp
 
 " YouCompleteMe
-let g:ycm_autoclose_preview_window_after_completion = 0
-let g:ycm_autoclose_preview_window_after_insertion = 0
+"let g:ycm_autoclose_preview_window_after_completion = 0
+"let g:ycm_autoclose_preview_window_after_insertion = 0
 
 
 " - CONFIG OPTIONS
@@ -207,19 +121,9 @@ set nofoldenable
 "Automatically apply changes to .vimrc
 autocmd! BufWritePost $MYVIMRC source $MYVIMRC
 
-" - PYTHON RELATED
-" let python_highlight_all = 1
-" set makeprg=python\ $*
-
-" " Launch the current buffer in IPython
-" function! IpythonMagic()
-"	vsp
-"	terminal ipython % --TerminalIPythonApp.force_interact=True
-" endfunction
-" nnoremap <leader>o :call IpythonMagic()<CR>
 
 " - STYLING
-colorscheme seoul256
+color seoul256
 syntax enable
 
 "Minimum of lines for scoll offset
@@ -233,9 +137,10 @@ set relativenumber
 
 set iskeyword-=_
 
-hi Normal ctermbg=234
-hi MatchParen cterm=bold ctermfg=red
-highlight CursorLine ctermbg=237
+"hi Normal ctermbg=234
+"Highlight matching parenthesis
+hi MatchParen cterm=bold ctermbg=blue
+highlight CursorLine ctermbg=239
 
 " - MAPPINGS
 inoremap <Up>		<NOP>
@@ -301,11 +206,6 @@ let g:syntastic_style_warning_symbol = '⚠'
 let g:syntastic_auto_loc_list=1
 let g:syntastic_aggregate_errors = 1
 let g:syntastic_c_include_dirs = [ '../includes', 'includes', 'include', '../include' ]
-
-" Ultisnips variables
-"let g:UltiSnipsExpandTrigger="<c-space>"
-"let g:UltiSnipsJumpForwardTrigger="<c-b>"
-"let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
 nnoremap <Leader>q :bp<CR>
 nnoremap <Leader>w :bn<CR>
