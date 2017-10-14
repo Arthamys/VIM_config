@@ -137,7 +137,6 @@ set relativenumber
 
 set iskeyword-=_
 
-"hi Normal ctermbg=234
 "Highlight matching parenthesis
 hi MatchParen cterm=bold ctermbg=blue
 highlight CursorLine ctermbg=239
